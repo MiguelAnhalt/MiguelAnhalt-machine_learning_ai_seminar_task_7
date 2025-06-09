@@ -65,7 +65,7 @@ def prepare_datasets(data_path_train, data_path_test, img_height, img_width, col
         image_size=(img_height, img_width),  # Resize images
         shuffle=False,
         seed=123,
-        batch_size=32,
+        batch_size=96,
     )
     
     return ds_train, ds_validation
