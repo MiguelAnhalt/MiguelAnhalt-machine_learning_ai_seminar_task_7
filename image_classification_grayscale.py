@@ -129,7 +129,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 # Train the model
-model.fit(train_images, train_labels, epochs=60)
+model.fit(train_images, train_labels, epochs=60, batch_size=120, validation_data=(test_images, test_labels))
 
 # Accuracy evaluation
 test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)

@@ -55,7 +55,7 @@ def prepare_datasets(data_path_train, data_path_test, img_height, img_width, col
         data_path_train,
         color_mode=color_mode_input,
         image_size=(img_height, img_width),  # Resize images
-        shuffle=False,                       # Do not shuffle to keep image-label alignment
+        shuffle=True,                       # Do not shuffle to keep image-label alignment
         seed=123,                            # Seed for reproducibility
         batch_size=96,                       # Batch size
     )
@@ -66,7 +66,7 @@ def prepare_datasets(data_path_train, data_path_test, img_height, img_width, col
         #color_mode=color_mode_input,
         color_mode='rgb',
         image_size=(img_height, img_width),  # Resize images
-        shuffle=False,
+        shuffle=True,
         seed=123,
         batch_size=32,
     )

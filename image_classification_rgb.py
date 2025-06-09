@@ -8,6 +8,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 from Task6_3_Load_image_and_process import main
 
+def apply_edge_detection(images):
+    if isinstance(images, np.ndarray):
+        images = tf.convert_to_tensor(images, dtype=tf.float32)
+    if images.shape.rank == 3:
+        images = tf.expand_dims(images, axis=-1)
+    edges = tf.image.sobel_edges(images)
+    magnitude = tf.sqrt(tf.reduce_sum(tf.square(edges), axis=-1))
+    return magnitude.numpy()
+
 # Configuration
 USE_RGB = True  # Set to False for grayscale images
 IMAGE_SIZE = (128, 128)  # Image dimensions (height, width)
@@ -89,6 +98,7 @@ model = tf.keras.Sequential([
     tf.keras.layers.Input(shape=input_shape),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dense(10, activation='softmax'),
     tf.keras.layers.Dense(len(class_names))  # Output layer matches number of classes
 ])
 
@@ -101,7 +111,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 # Train the model
-model.fit(train_images, train_labels, epochs=10)
+model.fit(train_images, train_labels, epochs=40)
 
 # Evaluate the model
 test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)
