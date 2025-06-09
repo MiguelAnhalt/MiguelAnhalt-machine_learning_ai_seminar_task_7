@@ -1,13 +1,12 @@
 # Task 6.3: Load image and process
 
 # Import necessary libraries
-import os
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3" # (or “3” for even more suppression)
 import tensorflow as tf             # For building and training models, and working with image datasets
 import matplotlib.pyplot as plt     # For visualizing sample images
+import numpy as np
 import os                           # For file and directory operations
 import sys                          # For system-level operations like exiting the script
-
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3" # (or “3” for even more suppression)
 
 def set_data_path(img_height, img_width):
     """
@@ -22,8 +21,11 @@ def set_data_path(img_height, img_width):
     dir_path = os.path.dirname(os.path.abspath(__file__))
 
     # Construct paths to training and test data
-    train_path = os.path.join(dir_path, 'data', 'my_data','train')
-    test_path = os.path.join(dir_path, 'data', 'my_data', 'test')
+    #train_path = os.path.join(dir_path, 'data', 'my_data','train')
+    #test_path = os.path.join(dir_path, 'data', 'my_data', 'test')
+
+    train_path = os.path.join(dir_path, 'data_groups', 'train')
+    test_path = os.path.join(dir_path, 'data_groups', 'test')
 
     # Check if training path exists, exit if it doesn't
     if not os.path.exists(train_path):
@@ -33,7 +35,7 @@ def set_data_path(img_height, img_width):
     return train_path, test_path, img_height, img_width
 
 
-def prepare_datasets(data_path_train, data_path_test, img_height, img_width, color_mode):
+def prepare_datasets(data_path_train, data_path_test, img_height, img_width, color_mode_input):
     """
     Loads and processes image data from directories into TensorFlow datasets.
 
@@ -51,16 +53,17 @@ def prepare_datasets(data_path_train, data_path_test, img_height, img_width, col
     # Load training data and convert to tf.data.Dataset
     ds_train = tf.keras.preprocessing.image_dataset_from_directory(
         data_path_train,
-        color_mode=color_mode,
+        color_mode=color_mode_input,
         image_size=(img_height, img_width),  # Resize images
         shuffle=False,                       # Do not shuffle to keep image-label alignment
         seed=123,                            # Seed for reproducibility
-        batch_size=32,                       # Batch size
+        batch_size=96,                       # Batch size
     )
 
     # Load test/validation data
     ds_validation = tf.keras.preprocessing.image_dataset_from_directory(
         data_path_test,
+        #color_mode=color_mode_input,
         color_mode='rgb',
         image_size=(img_height, img_width),  # Resize images
         shuffle=False,
@@ -128,7 +131,6 @@ def main(img_height_input, img_width_input, color_mode_input):    # Set paths to
 
     # Plot and visualize samples from datasets
     # plot_sample_images(ds_train, ds_validation)
-    import numpy as np
 
     class_names = ds_train.class_names
     class_counts = np.zeros(len(class_names), dtype=int)

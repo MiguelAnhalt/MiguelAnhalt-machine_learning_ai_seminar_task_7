@@ -29,9 +29,7 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 from Task6_3_Load_image_and_process import main
-print(tf.__version__)
 
-# Import the Fashion MNIST dataset
 # Configuration
 USE_RGB = False  # Set to False for grayscale images
 IMAGE_SIZE = (128, 128)  # Image dimensions (height, width)
@@ -131,11 +129,11 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 # Train the model
-model.fit(train_images, train_labels, epochs=10)
+model.fit(train_images, train_labels, epochs=60)
 
 # Accuracy evaluation
 test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)
-print('\nTest accuracy:', test_acc)
+print(f'\nTest accuracy: {test_acc * 100}%')
 
 # Making predictions
 probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
@@ -194,7 +192,8 @@ plt.show()
 # Color correct predictions in blue and incorrect predictions in red.
 num_rows = 5
 num_cols = 3
-num_images = num_rows*num_cols
+#num_images = num_rows*num_cols
+num_images = min(num_rows * num_cols, len(predictions))
 plt.figure(figsize=(2*2*num_cols, 2*num_rows))
 for i in range(num_images):
   plt.subplot(num_rows, 2*num_cols, 2*i+1)
